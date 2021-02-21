@@ -1,5 +1,6 @@
 class PokeHub {
   List<Pokemon> pokemon;
+  
 
   PokeHub({this.pokemon});
 
@@ -19,6 +20,8 @@ class PokeHub {
     }
     return data;
   }
+
+  
 }
 
 class Pokemon {

@@ -59,7 +59,7 @@ class PokeDetail extends StatelessWidget {
                         backgroundColor: Colors.blue,
                         label: Text(n.name,style: TextStyle(color: Colors.white),),
                         onSelected: (b) {}))
-                    ?.toList() ??[Text('No more Evolutions')]
+                    ?.toList() ??[Text("No more Evolutions for this pokemon",style: TextStyle(fontSize:20.0))]
               ),
             ],
               ),

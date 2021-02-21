@@ -23,6 +23,8 @@ class _HomePageState extends State<HomePage> {
       "https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json";
 
   PokeHub pokeHub;
+  PokeHub findPoke;
+  bool isSearching = false;
 
   @override
   void initState() {
@@ -38,24 +40,70 @@ class _HomePageState extends State<HomePage> {
     pokeHub = PokeHub.fromJson(decodedJson);
     print(pokeHub.toJson());
     setState(() {});
+    findPoke = PokeHub.fromJson(decodedJson);
+    print(findPoke.toJson());
   }
+
+  void findPokemon(value){
+    setState(() {
+      var tempListData = pokeHub.pokemon.where((pokemon) => pokemon.name.toLowerCase().contains(value.toLowerCase())).toList();
+      if(tempListData.length > 0){
+        findPoke.pokemon = tempListData; 
+      }
+    });
+  }
+  
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: new Text("Pokemon"),
+        title: !isSearching
+            ? new Text("Pokemon")
+            : TextField(
+                onChanged: (value) {
+                  findPokemon(value);
+                },
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                    hintText: "Search Aja Shay",
+                    hintStyle: TextStyle(color: Colors.white)),
+              ),
         backgroundColor: Colors.blue[400],
         centerTitle: true,
-        actions: <Widget> [new Icon(Icons.search)],
+        actions: <Widget>[
+          isSearching
+              ? IconButton(
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = false;
+                      findPoke = pokeHub;
+                    });
+                  },
+                )
+              : IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = true;
+                    });
+                  },
+                )
+        ],
       ),
-      body: pokeHub == null
+      body: findPoke == null
           ? Center(
               child: CircularProgressIndicator(),
             )
           : GridView.count(
               crossAxisCount: 2,
-              children: pokeHub.pokemon
+              children: findPoke.pokemon
                   .map((poke) => Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
@@ -94,11 +142,7 @@ class _HomePageState extends State<HomePage> {
                   .toList(),
             ),
       drawer: Drawer(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Colors.cyan[200],
-        child: Icon(Icons.refresh),
-      ),
+
     );
   }
 
