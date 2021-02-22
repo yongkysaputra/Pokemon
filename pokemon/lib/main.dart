@@ -44,16 +44,17 @@ class _HomePageState extends State<HomePage> {
     print(findPoke.toJson());
   }
 
-  void findPokemon(value){
+  void findPokemon(value) {
     setState(() {
-      var tempListData = pokeHub.pokemon.where((pokemon) => pokemon.name.toLowerCase().contains(value.toLowerCase())).toList();
-      if(tempListData.length > 0){
-        findPoke.pokemon = tempListData; 
+      var tempListData = pokeHub.pokemon
+          .where((pokemon) =>
+              pokemon.name.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+      if (tempListData.length > 0) {
+        findPoke.pokemon = tempListData;
       }
     });
   }
-  
-  
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +86,8 @@ class _HomePageState extends State<HomePage> {
                       this.isSearching = false;
                       findPoke = pokeHub;
                     });
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
                   },
                 )
               : IconButton(
@@ -107,17 +110,21 @@ class _HomePageState extends State<HomePage> {
                   .map((poke) => Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => PokeDetail(
-                              pokemon: poke, 
-                            )));
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PokeDetail(
+                                          pokemon: poke,
+                                        )));
                           },
                           child: Hero(
                             tag: poke.img,
-                              child: Card(
+                            child: Card(
                               elevation: 3.0,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
                                   Container(
                                     height: 100.0,
@@ -125,6 +132,22 @@ class _HomePageState extends State<HomePage> {
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
                                             image: NetworkImage(poke.img))),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        new Icon(Icons.star,
+                                            color: Colors.yellow),
+                                        new Icon(Icons.star,
+                                            color: Colors.yellow),
+                                        new Icon(Icons.star,
+                                            color: Colors.yellow),
+                                        new Icon(Icons.star,
+                                            color: Colors.yellow),
+                                      ],
+                                    ),
                                   ),
                                   Text(
                                     poke.name,
@@ -141,8 +164,25 @@ class _HomePageState extends State<HomePage> {
                       ))
                   .toList(),
             ),
-      drawer: Drawer(),
-
+      drawer: Drawer(
+        child: ListView(children: <Widget>[
+          new UserAccountsDrawerHeader(
+            accountName: new Text("Rica Matsumoto"),
+            accountEmail: new Text("AshKetchum@gmail.com"),
+            currentAccountPicture: new CircleAvatar(
+              backgroundImage: new NetworkImage(
+                  "https://i.pinimg.com/originals/f8/29/be/f829bed61f75627eea111dfde089fe2c.png"),
+            ),
+            decoration: new BoxDecoration(
+                image: new DecorationImage(
+                    image: new NetworkImage(
+                        "https://rog.asus.com/media/1554200908315.jpg"),
+                    fit: BoxFit.cover)),
+          ),
+          new ListTile()
+        ]),
+      ),
+      backgroundColor: Colors.cyan[200],
     );
   }
 
