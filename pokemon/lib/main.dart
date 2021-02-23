@@ -187,4 +187,5 @@ class _HomePageState extends State<HomePage> {
   }
 
   void get newMethod => Icons;
+  
 }
